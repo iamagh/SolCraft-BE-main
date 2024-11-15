@@ -1,0 +1,14 @@
+version: '3.1'
+
+services:
+
+  db:
+    container_name: solcraft_postgresql
+    image: postgres:latest
+    restart: unless-stopped
+    ports:
+      - ${DATABASE_PORT}:5432
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
