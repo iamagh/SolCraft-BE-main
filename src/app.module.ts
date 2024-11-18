@@ -22,6 +22,12 @@ import { RoleSeedService } from './database/seeds/role/role-seed.service';
 import { UserSeedService } from './database/seeds/user/user-seed.service';
 import { MinecraftModule } from './modules/minecraft/minecraft.module';
 // import { TransactionModule } from './modules/transaction/transaction.module';
+import { SocketModule } from './modules/socket/socket.module';
+
+// import { ChatModule } from './modules/socket/socket.module';
+// import { SocketModule } from './modules/socket/socket.module';
+
+
 
 @Module({
   imports: [
@@ -54,6 +60,7 @@ import { MinecraftModule } from './modules/minecraft/minecraft.module';
     WalletModule,
     TopCoinsModule,
     MinecraftModule,
+    SocketModule,
   ],
   providers: [
     // {

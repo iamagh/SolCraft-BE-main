@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+// import  registerAs from '../../config/minecraft.config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PlotsEntity } from './entities/plots.entity';
 import { Repository } from 'typeorm';
@@ -23,10 +24,15 @@ export class MinecraftService {
     serverPort: number;
     mapId: string;
   }> {
+    // return {
+    //   serverAddress: this.configService.get('SERVER_ADDRESS'),
+    //   serverPort: this.configService.get('SERVER_PORT'),
+    //   mapId: this.configService.get('MAP_ID'),
+    // };
     return {
-      serverAddress: this.configService.get('serverAddress'),
-      serverPort: this.configService.get('serverPort'),
-      mapId: this.configService.get('mapId'),
+      serverAddress: process.env.SERVER_ADDRESS,
+      serverPort: Number(process.env.SERVER_PORT),
+      mapId: process.env.MAP_ID,
     };
   }
 

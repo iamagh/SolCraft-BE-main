@@ -9,8 +9,9 @@ class EnvironmentVariablesValidator {
 }
 
 export default registerAs<MinecraftConfig>('minecraft', () => {
+  console.log("here")
   validateConfig(process.env, EnvironmentVariablesValidator);
-
+  
   return {
     serverAddress: process.env.SERVER_ADDRESS,
     serverPort: Number(process.env.SERVER_PORT),
