@@ -24,6 +24,8 @@ import { AddFriendDto } from './dto/add-friend.dto';
 import { UserFriendsService } from './services/user-friends.service';
 import { User } from './entities/user.entity';
 
+// import { MessageService } from '../socket/socket.message';
+
 @ApiBearerAuth()
 @ApiTags('User')
 @UseGuards(JwtAccessGuard)
@@ -34,7 +36,8 @@ export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly userFriendService: UserFriendsService,
-  ) {}
+    // private readonly messageService : MessageService
+  ) { }
 
   @SerializeOptions({
     groups: ['admin'],
@@ -96,10 +99,16 @@ export class UserController {
     @Body() addFriendDto: AddFriendDto,
     @Request() { user }: { user: User },
   ) {
-    return this.userFriendService.sendFriendRequest(
-      user,
-      addFriendDto.friendEmail,
-    );
+    // this.userFriendService.sendFriendRequest(
+    //   user,
+    //   addFriendDto.friendEmail,
+    // )
+    //   .then(() => {
+    //     this.messageService.sendMessageToUser(user.id,  'Friend request sent')
+    //   })
+    //   .catch(err => console.log(err))
+
+    return true
   }
 
   @Get('friends')

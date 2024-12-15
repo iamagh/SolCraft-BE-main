@@ -120,7 +120,7 @@ export class AuthController {
   }
 
   @Get('microsoft')
-  @UseGuards(AuthGuard('microsoft'))
+  @UseGuards(AuthGuard('microsoft'))       // go to the microsoft strategy
   microsoftLogin() {
     return HttpStatus.OK;
   }

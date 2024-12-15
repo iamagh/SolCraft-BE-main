@@ -11,6 +11,8 @@ import { Role } from '../role/role.entity';
 import { BaseService } from '../base/base.service';
 import { UserFriendsService } from './services/user-friends.service';
 import { UserFavoriteCoin } from './entities/user-favorite-coin.entity';
+// import {MessageService} from '../socket/socket.message'
+
 
 @Module({
   imports: [
@@ -23,7 +25,7 @@ import { UserFavoriteCoin } from './entities/user-favorite-coin.entity';
     UserService,
     RoleService,
     BaseService,
-    UserFriendsService,
+    UserFriendsService
   ],
   exports: [UserService, RoleService, UserFriendsService],
 })

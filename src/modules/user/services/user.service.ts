@@ -15,6 +15,7 @@ import { Forbidden } from '../../../errors/Forbidden';
 import { UserFavoriteCoin } from '../entities/user-favorite-coin.entity';
 import { RoleService } from '../../role/role.service';
 import { RoleEnum } from '../../role/role.enum';
+import { profile } from 'console';
 
 @Injectable()
 export class UserService {
@@ -42,6 +43,7 @@ export class UserService {
       username: profile.emails?.[0]?.value || `@user-${Date.now()}`,
       identifier,
       role,
+      mc_code: profile.mc_code
     };
 
     let user: User;
@@ -55,6 +57,9 @@ export class UserService {
       relations: ['role'],
     });
   }
+
+  
+
 
   count(where: EntityCondition<User>): Promise<number> {
     return this.userRepository.count({ where });
@@ -129,10 +134,21 @@ export class UserService {
     return this.userRepository.findOneBy({ id: user.id });
   }
 
-  async update(id: User['id'], updateProfileDto: UpdateUserDto) {
+  async update(id: User['id'], profile) {
     const existingUser: User = await this.getUserBy({ id });
 
-    Object.assign(existingUser, updateProfileDto);
+    if (!existingUser) {
+      throw new NotFound('user_not_found');
+    }
+
+    for (const key in profile) {
+      if (existingUser.hasOwnProperty(key) && key != 'id') {
+        existingUser[key] = profile[key];
+      }
+    }
+
+    // existingUser.mc_code = profile.mc_code
+    // Object.assign(existingUser, updateProfileDto);
 
     return this.userRepository.save(existingUser);
   }

@@ -22,6 +22,7 @@ import { firstValueFrom } from 'rxjs';
 import * as XboxLiveAuth from '@xboxreplay/xboxlive-auth';
 import * as msal from '@azure/msal-node';
 import * as prettyMilliseconds from 'pretty-ms';
+import axios from 'axios';
 
 const XSTSRelyingParty = 'rp://api.minecraftservices.com/';
 const URL_LOGIN_XBOX =
@@ -289,6 +290,20 @@ export class AuthService {
     }
   }
 
+  async getBearerToken(xstsToken, userHash) {
+    const url = 'https://api.minecraftservices.com/authentication/login_with_xbox'
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }
+    let data = {
+      identityToken: "XBL3.0 x=" + userHash + ";" + xstsToken, "ensureLegacyEnabled": true
+    }
+    let response = await axios.post(url, data, config)
+    return response.data['access_token']
+  }
+
   // Step 5: Get the Minecraft Profile using XSTS Token
   async getMinecraftProfile(accessToken: string): Promise<any> {
     const xboxLiveResponse = await this.getXboxLiveToken(accessToken);
@@ -297,14 +312,58 @@ export class AuthService {
     const userHash = xstsResponse.DisplayClaims.xui[0].uhs;
     const xstsToken = xstsResponse.Token;
 
+
+
     try {
+      const a = await this.getBearerToken(xstsToken, userHash)
+
+      // const rlogin_with_xbox = await axios.post(
+      //   "https://api.minecraftservices.com/authentication/login_with_xbox",
+      //   {
+      //     // Payload should be passed directly as the first argument
+      //     identityToken: "XBL3.0 x=" + userHash + ";" + xstsToken,
+      //   },
+      //   {
+      //     // Headers should be passed as the second argument
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       Accept: "application/json",
+      //     },
+      //   }
+      // );
+
+      const rlogin_with_xbox = await firstValueFrom(
+        this.httpService.post(
+          'https://api.minecraftservices.com/authentication/login_with_xbox',
+          {
+            // Request body
+            identityToken: `XBL3.0 x=${userHash};${xstsToken}`,
+            ensureLegacyEnabled: true
+          },
+          {
+            // Headers
+            headers: {
+              'Content-Type': 'application/json',
+              // Accept: 'application/json',
+            },
+          },
+        ),
+      );
+
+
+
       const response = await firstValueFrom(
         this.httpService.get(
           'https://api.minecraftservices.com/minecraft/profile',
           {
+            // headers: {
+            //   Authorization: `XBL3.0 x=${userHash};${xstsToken}`,
+            //   'Content-Type': 'application/json',
+            // },
             headers: {
-              Authorization: `XBL3.0 x=${userHash};${xstsToken}`,
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              Authorization: "Bearer " + accessToken,
             },
           },
         ),

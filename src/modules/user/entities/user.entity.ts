@@ -36,6 +36,9 @@ export class User extends Base {
   @Exclude({ toPlainOnly: true })
   password: string | null;
 
+
+
+
   @Index()
   @Column({ nullable: true })
   firstName: string | null;
@@ -48,6 +51,10 @@ export class User extends Base {
   @Exclude({ toPlainOnly: true })
   @Column({ nullable: true })
   identifier: string | null;
+
+  @Index()
+  @Column({ nullable: true })
+  mc_code: string | null;
 
   @ManyToOne(() => Role)
   role?: Role | null;
